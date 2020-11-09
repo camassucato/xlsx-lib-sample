@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import { writeFile, utils } from 'xlsx'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+  state = {
+    open: false
+  };
+
+  makeXLS = () => {
+
+    const jsonFile = {
+      'sheet1': [
+        { "nome": "gato", "categoria": "animal" },
+        { "nome": "cachorro", "categoria": "animal" },
+        { "nome": "porco", "categoria": "animal" },
+        { "nome": "galinha", "categoria": "animal" },
+        { "nome": "pato", "categoria": "animal" },
+        { "nome": "raposa", "categoria": "animal" },
+        { "nome": "cobra", "categoria": "animal" },
+      ]
+    }
+
+    const sheet = utils.json_to_sheet(jsonFile.sheet1)
+    const workbook = utils.book_new()
+    utils.book_append_sheet(workbook, sheet, 'animais')
+
+    writeFile(workbook, 'animais.xlsx')
+
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.makeXLS}> Gerar Planilha </button>
+      </div>
+    )
+  }
+
 }
 
 export default App;
